@@ -1,0 +1,10 @@
+package beerduino;
+
+message Ping {
+	required int32 id = 1;
+}
+
+message Echo {
+	required int32 id = 1;
+	optional string message = 2;
+}

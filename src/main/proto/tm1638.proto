@@ -15,15 +15,22 @@ enum Module {
 
 message Command {
     enum Type {
-        PING = 1;
-        CONSTRUCT = 2;
-        SET_LED = 10;
+    	SERVER = 1;
+        PING = 2;
+        CONSTRUCT = 3;
+        SET_LED = 4;
     }
 
     required Type type = 1;
-    optional Ping ping = 2;
-    optional Construct construct = 3;
-    optional SetLed setLed = 10;
+    optional Server server = 2;
+    optional Ping ping = 3;
+    optional Construct construct = 4;
+    optional SetLed setLed = 5;
+}
+
+message Server {
+	optional string host = 1;
+	required int32 port = 2;
 }
 
 message Ping {

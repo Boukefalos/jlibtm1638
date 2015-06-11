@@ -1,7 +1,7 @@
-package test;
+package com.github.boukefalos.tm1638;
 
 import beerduino.Beerduino.Echo;
 
-public interface EchoListener {
+public interface EchoReceiver {
 	public void receive(Echo echo);
 }

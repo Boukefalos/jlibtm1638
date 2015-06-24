@@ -3,71 +3,77 @@ package com.github.boukefalos.tm1638;
 import java.util.Properties;
 
 import org.picocontainer.Parameter;
+import org.picocontainer.PicoCompositionException;
+import org.picocontainer.parameters.ComponentParameter;
 import org.picocontainer.parameters.ConstantParameter;
 
+import base.exception.LoaderException;
 import base.loader.AbstractLoader;
-import base.work.Work;
 
-import com.github.boukefalos.tm1638.implementation.Localmplementation;
-import com.github.boukefalos.tm1638.implementation.TcpImplementation;
-import com.github.boukefalos.tm1638.implementation.UdpImplementation;
-import com.github.boukefalos.tm1638.server.TM1638Server;
-import com.github.boukefalos.tm1638.server.TM1638TcpServer;
-import com.github.boukefalos.tm1638.server.TM1638UdpServer;
+import com.github.boukefalos.tm1638.exception.ArduinoException;
+import com.github.boukefalos.tm1638.implementation.Local;
+import com.github.boukefalos.tm1638.implementation.Remote;
 
-public class Loader extends AbstractLoader {
+public class Loader extends AbstractLoader<Loader> {
     protected static final String PROPERTIES_FILE = "TM1638.properties";
 
-	public Loader(Properties properties) {
+	public Loader(Properties properties) throws LoaderException {
 		super();
-	
+
 		/* Add implementation */
 		switch (properties.getProperty("implementation")) {
 			case "local":
-				pico.addComponent(Localmplementation.class);
+				pico.addComponent(TM1638.class, Local.class);
 				break;				
 			case "remote":
-				//pico.addComponent(Remote.class);
-				break;
-		}
+				pico.addComponent(TM1638.class, Remote.class);
 
-		/* Add protocol */
-		if (properties.getProperty("protocol") != null) {
-			switch (properties.getProperty("protocol")) {
-				case "tcp":
-					pico.addComponent(TcpImplementation.class, TcpImplementation.class, new Parameter[]{
-						new ConstantParameter(properties.getProperty("remote.host")),
-						new ConstantParameter(Integer.valueOf(properties.getProperty("remote.port")))});
-					break;
-				case "udp":
-					pico.addComponent(UdpImplementation.class, UdpImplementation.class, new Parameter[] {
-						new ConstantParameter(properties.getProperty("remote.host")),
-						new ConstantParameter(Integer.valueOf(properties.getProperty("remote.port")))});
-					break;
-			}
+				/* Add remote duplex implementation */
+				try {
+					String protocol = properties.getOrDefault("server.protocol", "tcp").toString();
+					String implementation = properties.getOrDefault("tcp.implementation", "socket").toString();
+					String host = properties.getProperty("remote.host");
+					int port = Integer.valueOf(properties.getProperty("remote.port"));
+					addClientDuplex(protocol, implementation, host, port);
+				} catch (NumberFormatException e) {
+					throw new LoaderException("Failed to parse remote.port");
+				}				
+				break;
 		}
 
 		/* Add server */
 		if (properties.getProperty("server") != null) {
-			switch (properties.getProperty("server.protocol")) {
-				case "tcp":
-					pico.addComponent(TM1638TcpServer.class, TM1638TcpServer.class, new Parameter[]{
-						new ConstantParameter(getTM1638()),
-						new ConstantParameter(Integer.valueOf(properties.getProperty("server.port")))});
-					break;
-				case "udp":
-					pico.addComponent(TM1638UdpServer.class, TM1638UdpServer.class, new Parameter[]{
-						new ConstantParameter(getTM1638()),
-						new ConstantParameter(Integer.valueOf(properties.getProperty("server.port")))});
-			}			
+			boolean direct = Boolean.parseBoolean(properties.getOrDefault("server.direct", Server.DIRECT).toString());
+			pico.addComponent(Server.class, Server.class, new Parameter[] {
+				new ComponentParameter(),
+				new ComponentParameter(),
+				new ConstantParameter(direct)});
+
+			/* Add server forwarder implementation */
+			try {
+				String protocol = properties.getOrDefault("server.protocol", "tcp").toString();
+				String implementation = properties.getOrDefault("tcp.implementation", "socket").toString();
+				int port = Integer.valueOf(properties.getProperty("server.port"));
+				addServerDuplex(protocol, implementation, port);
+			} catch (NumberFormatException e) {
+				throw new LoaderException("Failed to parse server.port");
+			}
 		}
 	}
 
-    public TM1638 getTM1638() {
-    	return pico.getComponent(TM1638.class);
+	public TM1638 getTM1638() throws ArduinoException {
+		try {
+			return pico.getComponent(TM1638.class);
+		} catch (PicoCompositionException e) {
+			throw new ArduinoException("Failed to load");
+		}
     }
 
-    public Work getServer() {
-    	return (Work) pico.getComponent(TM1638Server.class);
+    public Server getServer() throws ArduinoException {
+    	try {
+    		return pico.getComponent(Server.class);
+		} catch (PicoCompositionException e) {
+			throw new ArduinoException("Failed to load");
+		}
     }
 }

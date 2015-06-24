@@ -1,7 +1,8 @@
 package com.github.boukefalos.tm1638.exception;
 
-public class ArduinoException extends Exception {
+import java.io.IOException;
 
+public class ArduinoException extends IOException {
 	protected static final long serialVersionUID = 1L;
 	
 	public ArduinoException(String message) {

@@ -2,7 +2,7 @@ package test;
 
 import java.util.Properties;
 
-import com.github.boukefalos.tm1638.exception.ArduinoException;
+import com.github.boukefalos.arduino.exception.ArduinoException;
 
 public class TestTcpImplementation {
 	public static void main(String[] args) throws Exception {

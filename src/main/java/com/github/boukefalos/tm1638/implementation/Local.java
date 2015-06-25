@@ -2,32 +2,38 @@ package com.github.boukefalos.tm1638.implementation;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
+import tm1638.Tm1638.Echo;
 import base.work.Listen;
 
+import com.github.boukefalos.arduino.exception.ArduinoException;
+import com.github.boukefalos.arduino.port.ParsingPort;
+import com.github.boukefalos.arduino.port.Port;
 import com.github.boukefalos.tm1638.AbstractTM1638;
-import com.github.boukefalos.tm1638.Arduino;
-import com.github.boukefalos.tm1638.exception.ArduinoException;
 
 public class Local extends AbstractTM1638 {
-	protected Arduino arduino;
+	protected Port arduino;
 	protected OutputStream outputStream;
+	protected ArrayList<Listen<Object>> listenList;
 
-	public Local() throws Exception {
-		this(Arduino.getInstance());
+	public Local() throws ArduinoException {
+		this(ParsingPort.getInstance(Echo.class));
 	}
 
-	public Local(Arduino arduino) throws ArduinoException {
+	public Local(Port arduino) throws ArduinoException {
 		this.arduino = arduino;
 		outputStream = arduino.getOutputStream();
+		listenList = new ArrayList<Listen<Object>>();
+		arduino.register(this);
 	}
 
 	public void register(Listen<Object> listen) {
-		arduino.register(listen);		
+		listenList.add(listen);		
 	}
 
 	public void remove(Listen<Object> listen) {
-		arduino.remove(listen);		
+		listenList.remove(listen);		
 	}
 
 	public void stop() {

@@ -6,6 +6,7 @@ public class TestUdpImplementation {
 	public static void main(String[] args) throws Exception {
 		Properties localProperties = new Properties();
 		localProperties.setProperty("implementation", "local");
+		localProperties.setProperty("protocol", "udp");
 		localProperties.setProperty("server", "true");
 		localProperties.setProperty("server.direct", "false");
 		localProperties.setProperty("server.port", "8883");

@@ -7,8 +7,8 @@ import base.Duplex;
 import base.Receiver;
 import base.work.Listen;
 
+import com.github.boukefalos.arduino.exception.ArduinoException;
 import com.github.boukefalos.tm1638.AbstractTM1638;
-import com.github.boukefalos.tm1638.exception.ArduinoException;
 
 public class Remote extends AbstractTM1638 implements Receiver {
 	protected Duplex duplex;
@@ -43,7 +43,7 @@ public class Remote extends AbstractTM1638 implements Receiver {
 
 	public void receive(byte[] buffer) {
 		// Arduino > Server > [Client]
-		// Should decode here?
+		// Should give option to decode here?
 		for (Listen<Object> listen : listenList) {
 			listen.add(buffer);
 		}

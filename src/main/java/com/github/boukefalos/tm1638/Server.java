@@ -7,42 +7,16 @@ import tm1638.Tm1638.Color;
 import tm1638.Tm1638.Command;
 import tm1638.Tm1638.Ping;
 import tm1638.Tm1638.SetLed;
-import base.Control;
 import base.Duplex;
-import base.Receiver;
-import base.exception.worker.ActivateException;
-import base.exception.worker.DeactivateException;
-import base.work.Listen;
 
-import com.github.boukefalos.tm1638.exception.ArduinoException;
+import com.github.boukefalos.arduino.exception.ArduinoException;
 
-public class Server extends Listen<Object> implements Control, Receiver {
-	protected static final boolean DIRECT = false;
-
+public class Server extends com.github.boukefalos.arduino.Server {
     protected TM1638 tm1638;
-	protected Duplex duplex;
-	protected boolean direct;
-
-	public Server(TM1638 tm1638, Duplex duplex) {
-		this(tm1638, duplex, DIRECT);
-	}
 
 	public Server(TM1638 tm1638, Duplex duplex, boolean direct) {
+		super(tm1638, duplex, direct);
 		this.tm1638 = tm1638;
-		this.duplex = duplex;
-		this.direct = direct;
-		tm1638.register(this); // Arduino > [input()]
-		duplex.register(this); // Client > [receive()]
-	}
-
-	public void activate() throws ActivateException {
-		duplex.start();
-		super.activate();
-	}
-	
-	public void deactivate() throws DeactivateException {
-		duplex.stop();
-		super.deactivate();
 	}
 
 	public void receive(byte[] buffer) {
@@ -82,15 +56,6 @@ public class Server extends Listen<Object> implements Control, Receiver {
 				logger.error("Failed to parse input");
 				return;
 			}
-		}
-	}
-
-	public void input(byte[] buffer) {
-		// Arduino > [Server] > Client
-		try {
-			duplex.send(buffer);
-		} catch (IOException e) {
-			logger.error("", e);
 		}
 	}
 }

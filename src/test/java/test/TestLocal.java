@@ -14,8 +14,9 @@ public class TestLocal extends Listen<Object> {
 	}
 
 	public static void main(TM1638 TM1638) throws InterruptedException {
-        TM1638.register(new TestLocal());
-        TM1638.construct(8, 9, 7);
+		TM1638.register(new TestLocal());
+		TM1638.start();
+		TM1638.construct(8, 9, 7);
 
         int i = 123;  
 		while (i < 10000) {

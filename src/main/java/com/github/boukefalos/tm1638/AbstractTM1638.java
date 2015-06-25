@@ -1,29 +1,32 @@
 package com.github.boukefalos.tm1638;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import tm1638.Tm1638.Color;
 import tm1638.Tm1638.Command;
 import tm1638.Tm1638.Command.Type;
 import tm1638.Tm1638.Construct;
+import tm1638.Tm1638.Echo;
 import tm1638.Tm1638.Ping;
 import tm1638.Tm1638.SetLed;
-import base.Sender;
 
-public abstract class AbstractTM1638 implements TM1638, Sender {
-	public static final int BUFFER_SIZE = 1024;
-	protected Logger logger = LoggerFactory.getLogger(getClass());
+import com.github.boukefalos.arduino.AbstractArduino;
+import com.google.protobuf.InvalidProtocolBufferException;
 
-	public void start() {}
-
-	public void stop() {}
-
-	public void exit() {
-		stop();
+public abstract class AbstractTM1638 extends AbstractArduino implements TM1638 {
+	public void input(byte[] buffer) {
+		System.out.println(new String(buffer));
+		try {
+			ByteArrayInputStream input = new ByteArrayInputStream(buffer);
+			Echo echo = Echo.parseDelimitedFrom(input);
+			System.out.println(echo.getMessage());
+		} catch (InvalidProtocolBufferException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void command(Command command) {

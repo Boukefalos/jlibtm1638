@@ -4,7 +4,7 @@ import java.util.Properties;
 
 import org.picocontainer.PicoCompositionException;
 
-import tm1638.Tm1638.Echo;
+import tm1638.Tm1638.Message;
 import base.exception.LoaderException;
 
 import com.github.boukefalos.arduino.exception.ArduinoException;
@@ -17,7 +17,7 @@ public class Loader extends com.github.boukefalos.arduino.Loader {
 
     public Loader(Properties properties) throws LoaderException {
     	super(Local.class, Remote.class, Server.class, properties);
-    	pico.addComponent(ParsingPort.getInstance(Echo.class));    	
+    	pico.addComponent(ParsingPort.getInstance(Message.class));    	
 	}
 
 	public TM1638 getTM1638() throws ArduinoException {

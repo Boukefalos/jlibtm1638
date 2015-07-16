@@ -2,7 +2,6 @@ package test;
 
 import java.util.Properties;
 
-import base.exception.LoaderException;
 import base.exception.worker.ActivateException;
 
 import com.github.boukefalos.arduino.exception.ArduinoException;

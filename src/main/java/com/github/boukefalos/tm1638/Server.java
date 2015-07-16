@@ -6,7 +6,7 @@ import java.io.IOException;
 import tm1638.Tm1638.Color;
 import tm1638.Tm1638.Command;
 import tm1638.Tm1638.Ping;
-import tm1638.Tm1638.SetLed;
+import tm1638.Tm1638.SetLED;
 import base.Duplex;
 
 import com.github.boukefalos.arduino.exception.ArduinoException;
@@ -38,13 +38,13 @@ public class Server extends com.github.boukefalos.arduino.Server {
 						tm1638.ping(ping.getId());
 						break;
 					case SET_LED:
-						SetLed setLed = command.getSetLed();
-						logger.debug("Color = " + setLed.getColor().name());
-						switch (setLed.getColor()) {
+						SetLED setLED = command.getSetLED();
+						logger.debug("Color = " + setLED.getColor().name());
+						switch (setLED.getColor()) {
 							case RED:
-								tm1638.setLed(Color.RED, 1);
+								tm1638.setLED(Color.RED, 1);
 							case GREEN:
-								tm1638.setLed(Color.GREEN, 1);
+								tm1638.setLED(Color.GREEN, 1);
 							default:
 								break;
 						}

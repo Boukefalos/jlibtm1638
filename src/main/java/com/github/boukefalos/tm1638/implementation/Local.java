@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
-import tm1638.Tm1638.Echo;
+import tm1638.Tm1638.Message;
 import base.work.Listen;
 
 import com.github.boukefalos.arduino.exception.ArduinoException;
@@ -18,7 +18,7 @@ public class Local extends AbstractTM1638 {
 	protected ArrayList<Listen<Object>> listenList;
 
 	public Local() throws ArduinoException {
-		this(ParsingPort.getInstance(Echo.class));
+		this(ParsingPort.getInstance(Message.class));
 	}
 
 	public Local(Port arduino) throws ArduinoException {
@@ -43,6 +43,7 @@ public class Local extends AbstractTM1638 {
 	public void send(byte[] buffer) throws ArduinoException {
 		try {
 		outputStream.write(buffer);
+		outputStream.flush();
 		} catch (IOException e) {
 			throw new ArduinoException("Failed to write to arduino");
 		}

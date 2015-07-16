@@ -1,6 +1,5 @@
 package test;
 
-import tm1638.Tm1638.Color;
 import base.work.Listen;
 
 import com.github.boukefalos.tm1638.TM1638;
@@ -15,8 +14,21 @@ public class TestLocal extends Listen<Object> {
 	public static void main(TM1638 TM1638) throws InterruptedException {
 		TM1638.register(new TestLocal());
 		TM1638.start();
-		TM1638.construct(8, 9, 7);
+
+		/*TM1638.construct(8, 9, 7);
 		TM1638.setupDisplay(true,  1);
+		TM1638.setLEDs(0xff00);*/
+
+		// Light up all the green LEDs
+		TM1638.setLEDs(0x00ff);
+		Thread.sleep(2000);
+		//TM1638.setLEDs(0x0000);
+
+		// Light up all the red LEDs
+		TM1638.setLEDs(0xff00);
+		Thread.sleep(2000);
+		TM1638.setLEDs(0x0000);
+
         int i = 0;
 		while (i < 10000) {
             //TM1638.setLED(i % 2 == 0 ? Color.GREEN : Color.RED, i % 8);

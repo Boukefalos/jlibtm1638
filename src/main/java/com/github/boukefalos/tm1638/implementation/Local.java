@@ -44,6 +44,7 @@ public class Local extends AbstractTM1638 {
 		try {
 		outputStream.write(buffer);
 		outputStream.flush();
+		sleep(100);
 		} catch (IOException e) {
 			throw new ArduinoException("Failed to write to arduino");
 		}

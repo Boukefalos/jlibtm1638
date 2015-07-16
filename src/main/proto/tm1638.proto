@@ -69,22 +69,25 @@ message SetDisplayDigit {
 	required int32 digit = 1;	
 	required int32 pos = 2;
 	required bool dot = 3;
-	optional bytes font = 4;
+	required bool has_font = 4;
+	optional bytes font = 5;
 }
 
 message SetDisplayToNumber {
-	required int32 number = 1;
-	required bool dots = 2;
-	optional bytes font = 3;
-	optional bool leadingZeros = 4 [default = false];
-	optional bool sign = 5 [default = true];
+	required sint32 number = 1;
+	required int32 dots = 2;
+	required bool has_font = 3;
+	optional bytes font = 4;
+	optional bool leadingZeros = 5 [default = false];
+	optional bool sign = 6 [default = true];
 }
 
 message SetDisplayToString {
 	required string string = 1;	
 	required int32 dots = 2;
 	required int32 pos = 3;
-	optional bytes font = 4;
+	required bool has_font = 4;
+	optional bytes font = 5;
 }
 
 message SetLED {

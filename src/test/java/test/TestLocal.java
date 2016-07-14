@@ -1,12 +1,12 @@
 package test;
 
-import base.work.Listen;
-
 import com.github.boukefalos.arduino.port.StringPort;
 import com.github.boukefalos.tm1638.TM1638;
 import com.github.boukefalos.tm1638.implementation.Local;
 
-public class TestLocal extends Listen<Object> {
+import base.work.ReflectiveListen;
+
+public class TestLocal extends ReflectiveListen {
     public static void main(String[] args) throws Exception {
         TM1638 TM1638 = new Local(StringPort.getInstance());
         main(TM1638);
@@ -17,7 +17,7 @@ public class TestLocal extends Listen<Object> {
     }
 
     public static void main(TM1638 TM1638) throws Exception {
-        TM1638.register(new TestLocal());
+        //TM1638.register(new TestLocal());
         TM1638.start();
 
         TM1638.construct(8, 9, 7);

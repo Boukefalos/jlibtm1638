@@ -5,12 +5,13 @@ import java.util.Properties;
 import org.picocontainer.PicoCompositionException;
 
 import tm1638.Tm1638.Message;
-import base.exception.LoaderException;
 
 import com.github.boukefalos.arduino.exception.ArduinoException;
 import com.github.boukefalos.arduino.port.ParsingPort;
 import com.github.boukefalos.tm1638.implementation.Local;
 import com.github.boukefalos.tm1638.implementation.Remote;
+
+import base.exception.LoaderException;
 
 public class Loader extends com.github.boukefalos.arduino.Loader {
     protected static final String PROPERTIES_FILE = "TM1638.properties";
